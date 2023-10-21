@@ -1,17 +1,19 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+ const defaultInstance = axios.create({});
 
 interface IRequest {
   query: string;
   variables: any;
 }
-const defaultInstance = axios.create({});
 
 const bareAxiosFetcher = async (
   request: IRequest,
-  options: AxiosRequestConfig = {},
+  options: AxiosRequestConfig & { readonly arg?: any } = {},
   instance: AxiosInstance = defaultInstance
 ) => {
-    console.log(":fdgjkjfhgkjhgkjhg")
+  if (!request.variables) {
+    request.variables = options.arg;
+  }
   return await instance({
     url: "https://graphqlzero.almansi.me/api",
     data: request,
@@ -20,16 +22,5 @@ const bareAxiosFetcher = async (
   }).then((r) => r.data);
 };
 
-const mutationAxiosFetcher = async (
-  url: string,
-  options: AxiosRequestConfig = {},
-  instance: AxiosInstance = defaultInstance
-) => {
-  return await instance({
-    url,
-    ...options,
-  }).then((r) => r.data);
-};
-
-const axiosAdaptor = { bare: bareAxiosFetcher, mutation: mutationAxiosFetcher };
+const axiosAdaptor = { bare: bareAxiosFetcher };
 export default axiosAdaptor;

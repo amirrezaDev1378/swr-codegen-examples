@@ -17,7 +17,7 @@ export function useFindUser(variables: FindUserQueryVariables) {
   user(id: $userId) {
     ...UserFields
   }
-}`, variables}, bareFetcher);
+}`, variables}, bareFetcher as any);
 
   return {
     data,
