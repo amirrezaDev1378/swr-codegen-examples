@@ -3,7 +3,8 @@ const fs = require("fs");
 module.exports = {
     gqlGlob: "./**/*.gql",
     targetPath: "src/generated/swr/",
-    schema: "./schema.graphql"
+    schema: "./schema.graphql",
+    gatewayAddress: "http://localhost:4000/graphql",
 };
 
 // -----------
