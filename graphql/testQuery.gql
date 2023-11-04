@@ -1,13 +1,16 @@
-query Post($id:ID!){
-  post(id: $id) {
-    id
-    title
-    body
-  }
+mutation createTodo(
+    $input: CreateTodoInput!
+){
+    createTodo(input:$input){
+        id , title
+    }
 }
 
-mutation CreateComment($input:CreateCommentInput!){
-  createComment(input:$input){
-    id
-  }
+query getAllTodos {
+    todos (options: {paginate: {page: 1,limit: 10}}) {
+        data{
+            title ,
+            id
+        }
+    }
 }
