@@ -1,95 +1,59 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import {useGetAllTodos} from "@/generated/swr/hooks/queries/testQuery.gql.hooks";
+import {useCreateTodo} from "@/generated/swr/hooks/mutations/testQuery.gql.hooks";
+import React from "react";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const {data, isLoading: isLoadingTodos} = useGetAllTodos({});
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+    const {trigger, isMutating} = useCreateTodo();
+    const handleCreateTodo = (e: React.FormEvent) => {
+        e.preventDefault();
+        const inputVal = document.getElementById("todoTitle") as HTMLInputElement;
+        if (!inputVal) return;
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+        const {value} = inputVal;
+        if (!value) return alert("please add a title for your todo!!!");
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+        trigger({
+            input: {
+                completed: false,
+                title: value
+            }
+        }).then((d) => {
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+            alert(`Todo created successfully!!! , your todo id is ${d?.createTodo?.id}`);
+        }).catch((reason) => {
+            alert("An error accord while creating a todo ☹️ ,check your console... ");
+            console.error(reason);
+        });
+
+    };
+
+
+    return (
+        <main style={{padding: 40}}>
+
+            <h1>
+                press <kbd>F12</kbd> to open your console!
+            </h1>
+
+            {(!isLoadingTodos && data?.todos?.data) && <h3>Query fetched Successfully !</h3>}
+            {isLoadingTodos && "Loading Todos ..."}
+
+            {isMutating && "Mutating Todos ..."}
+            <ul>
+                {!isLoadingTodos && data?.todos?.data?.map(d => <li key={d?.id}>{d?.title}</li>)}
+            </ul>
+
+            <form onSubmit={handleCreateTodo}>
+                <input type="text" placeholder={"todo title"} id={"todoTitle"}/>
+                <button type={"submit"}>
+                    create todo
+                </button>
+            </form>
+        </main>
+    );
 }

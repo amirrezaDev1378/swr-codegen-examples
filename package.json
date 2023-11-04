@@ -1,24 +1,31 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "name",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen":"swr-codegen configPath=./codegen-config.js"
+    "swr-init": "swr-codegen --init",
+    "codegen": "swr-codegen --configPath=swr-codegen.config.js"
   },
   "dependencies": {
+    "axios": "^1.5.1",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
-    "swr-codegen": "^0.0.2"
+    "swr": "^2.2.4",
+    "swr-codegen": "0.0.4-beta2"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "typescript": "^5"
-  }
+  },
+  "description": "harchi",
+  "main": "index.js",
+  "repository": "https://github.com/amirrezaDev1378/swr-codegen-examples.git",
+  "license": "MIT"
 }

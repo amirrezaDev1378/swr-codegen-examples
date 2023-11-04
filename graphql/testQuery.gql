@@ -1,17 +1,16 @@
-query findUser($userId: ID!) {
-	user(id: $userId) {
-		...UserFields
-	}
+mutation createTodo(
+    $input: CreateTodoInput!
+){
+    createTodo(input:$input){
+        id , title
+    }
 }
 
-fragment UserFields on User {
-	id
-	username
-	role
-}
-
-mutation CreateMessage($input: MessageInput) {
-	createMessage(input: $input) {
-		id
-	}
+query getAllTodos {
+    todos (options: {paginate: {page: 1,limit: 10}}) {
+        data{
+            title ,
+            id
+        }
+    }
 }
