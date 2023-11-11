@@ -1,0 +1,36 @@
+query Post($id:ID!){
+  post(id: $id) {
+    id
+    title
+    body
+    comments{
+      data{
+        id
+        name
+        body
+      }
+    }
+  }
+}
+
+mutation CreateComment($input:CreateCommentInput!){
+  createComment(input:$input){
+    id
+  }
+}
+query Posts($options:PageQueryOptions){
+ posts(options:$options){
+  data{
+    id
+    title
+    body
+    comments{
+      data{
+        id
+        name
+        body
+      }
+    }
+  }
+}
+}

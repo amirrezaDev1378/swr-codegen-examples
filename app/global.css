@@ -1,0 +1,7 @@
+input {
+  margin: 8px;
+}
+div,
+form {
+  border-radius: 8px;
+}
